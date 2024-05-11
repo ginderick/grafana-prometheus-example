@@ -1,0 +1,22 @@
+{
+  "name": "grafana-prometheus-example",
+  "version": "1.0.0",
+  "description": "<!--toc:start-->",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "Gin Derick",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.27.0",
+    "prom-client": "^15.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
