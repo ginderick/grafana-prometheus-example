@@ -18,5 +18,7 @@ RUN npm ci --omit=dev && rm package-lock.json node_modules/.package-lock.json
 
 COPY --from=build /app/build ./
 
+EXPOSE 8000
+
 CMD ["node", "index.js"]
 # CMD ["node", "./build/index.js"]

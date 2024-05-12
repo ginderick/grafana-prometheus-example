@@ -1,7 +1,11 @@
-version: "3"
 networks:
   localnetwork:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/24
+          gateway: 172.21.0.1
 
 services:
   fastify-server:
@@ -9,7 +13,8 @@ services:
       context: ./fastify-server
       dockerfile: Dockerfile
     networks:
-      - localnetwork
+      localnetwork:
+        ipv4_address: 172.21.0.2
     ports:
       - 8000:8000
     restart: unless-stopped
@@ -18,12 +23,14 @@ services:
     volumes:
       - "./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
     networks:
-      - localnetwork
+      localnetwork:
+        ipv4_address: 172.21.0.3
     ports:
       - 9090:9090
   node-exporter:
     image: prom/node-exporter:v1.8.0
     networks:
-      - localnetwork
+      localnetwork:
+        ipv4_address: 172.21.0.4
     ports:
       - 9100:9100
