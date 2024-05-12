@@ -1,20 +1,22 @@
-FROM node:18-alpine AS builder
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+FROM node:18 AS build
+
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci 
+
+RUN npm ci
+
 COPY . .
+
 RUN npm run build
 
-FROM node:18-alpine AS runner
+FROM node:18
+
 COPY package*.json .
+
 RUN npm ci --omit=dev && rm package-lock.json node_modules/.package-lock.json
 
-WORKDIR /usr/app
-COPY --from=builder /app/build ./build
-RUN npm install --omit=dev
-USER node
-ENV NODE_ENV="production"
+COPY --from=build /app/build ./
 
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
+# CMD ["node", "./build/index.js"]

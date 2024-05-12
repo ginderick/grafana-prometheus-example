@@ -6,10 +6,13 @@ networks:
 services:
   fastify-server:
     build:
-      context: .
-      dockerfile: ./fastify-server/Dockerfile
+      context: ./fastify-server
+      dockerfile: Dockerfile
     networks:
       - localnetwork
+    ports:
+      - 8000:8000
+    restart: unless-stopped
   prometheus:
     image: prom/prometheus:v2.52.0
     volumes:
