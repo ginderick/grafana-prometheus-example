@@ -1,46 +1,29 @@
 import Fastify from "fastify";
-import client from "prom-client";
+import metricsPlugin from "fastify-metrics";
 
 // Fastify and other web servers typically bind to the loopback IP address (127.0.0.1) on the host machine
 // However docker container, this loopback IP address is inaccessible from the host machine or other network devices
-const { ADDRESS = "localhost", PORT = "3000" } = process.env;
+async function main() {
+  const { ADDRESS = "localhost", PORT = "3000" } = process.env;
 
-const register = new client.Registry();
-register.setDefaultLabels({
-  app: "fastify-server",
-});
-client.collectDefaultMetrics({ register });
+  const fastify = Fastify({
+    logger: true,
+  });
+  await fastify.register(metricsPlugin, { endpoint: "/metrics" });
 
-const collectDefaultMetrics = client.collectDefaultMetrics;
-collectDefaultMetrics({
-  labels: { NODE_APP_INSTANCE: process.env.NODE_APP_INSTANCE },
-});
+  fastify.get("/", async (request, reply) => {
+    reply.send({ hello: "world" });
+  });
 
-const requestsCounter = new client.Counter({
-  name: "hello_world_total",
-  help: "Hello World request.",
-  registers: [register], // specify a non-default registry
-});
+  fastify.listen(
+    { host: ADDRESS, port: parseInt(PORT, 10) },
+    function (err, address) {
+      if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+      }
+    },
+  );
+}
 
-const fastify = Fastify({
-  logger: true,
-});
-
-fastify.get("/metrics", async (request, reply) => {
-  reply.type(register.contentType).send(await register.metrics());
-});
-
-fastify.get("/", async (request, reply) => {
-  requestsCounter.inc();
-  reply.send({ hello: "world" });
-});
-
-fastify.listen(
-  { host: ADDRESS, port: parseInt(PORT, 10) },
-  function (err, address) {
-    if (err) {
-      fastify.log.error(err);
-      process.exit(1);
-    }
-  },
-);
+main();
