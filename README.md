@@ -4,6 +4,7 @@
 
 - [Grafana and Prometheus Practice Application](#grafana-and-prometheus-practice-application)
   - [Overview](#overview)
+  - [Running](#running)
   <!--toc:end-->
 
 ## Overview
@@ -24,16 +25,22 @@ https://github.com/ginderick/grafana-prometheus-example.git
 cd grafana-prometheus-example
 ```
 
-3. Install the dependencies
-
-```
-npm install
-```
-
-## Running the application
+## Running
 
 1. Start the application
 
 ```
-npm start
+docker compose up --build -d
+```
+
+### Accessing Prometheus
+
+```
+http://localhost:9090
+```
+
+### Accessing Grafana
+
+```
+http://localhost:3000
 ```
