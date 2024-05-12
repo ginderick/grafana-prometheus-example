@@ -1,20 +1,54 @@
-version: "3"
 networks:
   localnetwork:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.21.0.0/24
+          gateway: 172.21.0.1
 
 services:
+  fastify-server:
+    build:
+      context: ./fastify-server
+      dockerfile: Dockerfile
+    container_name: fastify-server
+    networks:
+      localnetwork:
+        ipv4_address: 172.21.0.100
+    ports:
+      - 3002:3002
+    restart: unless-stopped
   prometheus:
     image: prom/prometheus:v2.52.0
+    container_name: prometheus
     volumes:
       - "./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
+      - "./prometheus/prometheus-data:/prometheus"
     networks:
-      - localnetwork
+      localnetwork:
+        ipv4_address: 172.21.0.101
     ports:
       - 9090:9090
   node-exporter:
     image: prom/node-exporter:v1.8.0
+    container_name: node-exporter
     networks:
-      - localnetwork
+      localnetwork:
+        ipv4_address: 172.21.0.102
     ports:
       - 9100:9100
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    networks:
+      localnetwork:
+        ipv4_address: 172.21.0.103
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    restart: unless-stopped
