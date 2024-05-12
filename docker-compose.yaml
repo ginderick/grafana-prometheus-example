@@ -4,6 +4,12 @@ networks:
     driver: bridge
 
 services:
+  fastify-server:
+    build:
+      context: .
+      dockerfile: ./fastify-server/Dockerfile
+    networks:
+      - localnetwork
   prometheus:
     image: prom/prometheus:v2.52.0
     volumes:
