@@ -12,6 +12,7 @@ services:
     build:
       context: ./fastify-server
       dockerfile: Dockerfile
+    container_name: fastify-server
     networks:
       localnetwork:
         ipv4_address: 172.21.0.100
@@ -20,6 +21,7 @@ services:
     restart: unless-stopped
   prometheus:
     image: prom/prometheus:v2.52.0
+    container_name: prometheus
     volumes:
       - "./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
       - "./prometheus/prometheus-data:/prometheus"
@@ -30,8 +32,23 @@ services:
       - 9090:9090
   node-exporter:
     image: prom/node-exporter:v1.8.0
+    container_name: node-exporter
     networks:
       localnetwork:
         ipv4_address: 172.21.0.102
     ports:
       - 9100:9100
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    networks:
+      localnetwork:
+        ipv4_address: 172.21.0.103
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/datasources
+    restart: unless-stopped

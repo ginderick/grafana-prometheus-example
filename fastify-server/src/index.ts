@@ -10,6 +10,12 @@ register.setDefaultLabels({
   app: "fastify-server",
 });
 client.collectDefaultMetrics({ register });
+
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics({
+  labels: { NODE_APP_INSTANCE: process.env.NODE_APP_INSTANCE },
+});
+
 const requestsCounter = new client.Counter({
   name: "hello_world_total",
   help: "Hello World request.",
