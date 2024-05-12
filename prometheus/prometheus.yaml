@@ -1,7 +1,5 @@
 global:
-  scrape_interval: "1m"
-  scrape_timeout: "10s"
-  evaluation_interval: "1m"
+  scrape_interval: "10s"
 scrape_configs:
   - job_name: fastify-server
     metrics_path: /metrics
@@ -15,3 +13,6 @@ scrape_configs:
     label_name_length_limit: 0
     label_value_length_limit: 0
     target_limit: 0
+    static_configs:
+      - targets:
+          - 172.21.0.1:3002
