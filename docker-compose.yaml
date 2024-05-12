@@ -22,6 +22,7 @@ services:
     image: prom/prometheus:v2.52.0
     volumes:
       - "./prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml"
+      - "./prometheus/prometheus-data:/prometheus"
     networks:
       localnetwork:
         ipv4_address: 172.21.0.101
