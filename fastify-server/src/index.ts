@@ -1,6 +1,10 @@
 import Fastify from "fastify";
 import client from "prom-client";
 
+// Fastify and other web servers typically bind to the loopback IP address (127.0.0.1) on the host machine
+// However docker container, this loopback IP address is inaccessible from the host machine or other network devices
+const { ADDRESS = "localhost", PORT = "3000" } = process.env;
+
 const register = new client.Registry();
 register.setDefaultLabels({
   app: "fastify-server",
@@ -25,9 +29,12 @@ fastify.get("/", async (request, reply) => {
   reply.send({ hello: "world" });
 });
 
-fastify.listen({ port: 8000 }, function (err, address) {
-  if (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-});
+fastify.listen(
+  { host: ADDRESS, port: parseInt(PORT, 10) },
+  function (err, address) {
+    if (err) {
+      fastify.log.error(err);
+      process.exit(1);
+    }
+  },
+);
