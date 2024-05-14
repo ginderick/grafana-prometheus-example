@@ -15,4 +15,5 @@ scrape_configs:
     target_limit: 0
     static_configs:
       - targets:
-          - 172.21.0.1:3002
+          - 172.21.0.100:3002
+          - 172.21.0.104:8000
