@@ -69,3 +69,5 @@ package-lock.json
 
 ## Prometheus
 prometheus-data
+## Grafana
+grafana_data
