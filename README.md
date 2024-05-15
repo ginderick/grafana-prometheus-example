@@ -9,7 +9,9 @@
 
 ## Overview
 
-This repository contains an application designed for practicing monitoring and visualization using Grafana and Prometheus. The application is a simple web server written in Node.js that exposes a few endpointsfor demonstration purposes. Prometheus is used to scrape metrics from the application, and Grafana is used to create dashboards to visualize these metrics.
+This repository contains an application designed for practicing monitoring and visualization using Grafana and Prometheus. The application is a simple web server written in Node.js that uses Fastify that exposes a few endpoints for demonstration purposes. Prometheus is used to scrape metrics from the application, and Grafana is used to create dashboards to visualize these metrics.
+
+Application repository link: [fastify-typescript-users](https://github.com/ginderick/fastify-typescript-users.git)
 
 ## Installation
 
@@ -44,3 +46,7 @@ http://localhost:9090
 ```
 http://localhost:3000
 ```
+
+## License
+
+This software is licensed under the [Apache 2 license](./LICENSE).
