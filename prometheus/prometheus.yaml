@@ -17,3 +17,12 @@ scrape_configs:
       - targets:
           - 172.21.0.100:3002
           - 172.21.0.104:8080
+          - 172.21.0.102:9100
+
+  - job_name:
+      docker
+      # metrics_path defaults to '/metrics'
+      # scheme defaults to 'http'.
+
+    static_configs:
+      - targets: ["host.docker.internal:9323"]
